@@ -1,0 +1,15 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { AiFlashcardGenerator } from "@/components/AiFlashcardGenerator";
+---
+
+<Layout title="Dashboard | Inteligentne Fiszki">
+  <div class="container mx-auto max-w-2xl py-8">
+    <h1 class="mb-4 text-2xl font-bold">Generator fiszek</h1>
+    <p class="mb-6 text-muted-foreground">
+      Wybierz metodę tworzenia nowych fiszek. Możesz skorzystać z pomocy AI, aby
+      automatycznie wygenerować je z Twoich notatek, lub dodać je ręcznie.
+    </p>
+    <AiFlashcardGenerator client:load />
+  </div>
+</Layout> 
