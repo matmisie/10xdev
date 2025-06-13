@@ -14,14 +14,12 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   });
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
   
-  const user = session?.user;
-
   if (user) {
     locals.user = {
-      email: user.email,
+      email: user.email!,
       id: user.id,
     };
   } else {
@@ -30,8 +28,6 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   
   // For Astro type-safety
   locals.supabase = supabase;
-  locals.session = session;
-
 
   if (!user && !PUBLIC_PATHS.includes(url.pathname)) {
     // If user is not logged in and tries to access a protected route

@@ -136,6 +136,11 @@ on ai_suggestions for select
 to authenticated
 using (auth.uid() = user_id);
 
+create policy "allow authenticated users to create their own suggestions"
+on ai_suggestions for insert
+to authenticated
+with check (auth.uid() = user_id);
+
 -- this policy allows the backend (using service_role) to insert suggestions.
 -- service_role bypasses rls.
 create policy "allow service_role to create suggestions"

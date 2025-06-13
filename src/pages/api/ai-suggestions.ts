@@ -13,9 +13,9 @@ const GenerateAiSuggestionsSchema = z.object({
 });
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const { session, supabase } = locals;
+  const { user, supabase } = locals;
 
-  if (!session?.user) {
+  if (!user) {
     return new Response("Unauthorized", { status: 401 });
   }
 
@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   const { data, error } = await aiSuggestionService.generateAndStoreSuggestions(
     command.text,
-    session.user.id,
+    user.id,
     supabase
   );
 
