@@ -9,11 +9,7 @@ interface FlashcardSuggestion {
 }
 
 export class AiSuggestionService {
-  public async generateAndStoreSuggestions(
-    text: string,
-    userId: string,
-    db: SupabaseClient<Database>
-  ) {
+  public async generateAndStoreSuggestions(text: string, userId: string, db: SupabaseClient<Database>) {
     try {
       const batchId = uuidv4();
       const sourceTextHash = SHA256(text).toString();
@@ -28,7 +24,7 @@ ${text}
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${import.meta.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${import.meta.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -57,10 +53,7 @@ ${text}
         status: "pending" as const,
       }));
 
-      const { data, error } = await db
-        .from("ai_suggestions")
-        .insert(suggestionsToInsert)
-        .select();
+      const { data, error } = await db.from("ai_suggestions").insert(suggestionsToInsert).select();
 
       if (error) {
         console.error("Error inserting suggestions into database:", error);
@@ -75,4 +68,4 @@ ${text}
   }
 }
 
-export const aiSuggestionService = new AiSuggestionService(); 
+export const aiSuggestionService = new AiSuggestionService();

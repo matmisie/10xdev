@@ -17,38 +17,38 @@ CREATE TYPE suggestion_status AS ENUM ('pending', 'accepted', 'rejected');
 
 Przechowuje wszystkie aktywne fiszki utworzone przez użytkowników.
 
-| Nazwa Kolumny   | Typ Danych                 | Ograniczenia                                                                    | Opis                                                                 |
-|-----------------|----------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| `id`            | `uuid`                     | `PRIMARY KEY`, `DEFAULT gen_random_uuid()`                                      | Unikalny identyfikator fiszki.                                       |
-| `user_id`       | `uuid`                     | `NOT NULL`, `REFERENCES auth.users(id) ON DELETE CASCADE`                       | Identyfikator użytkownika (właściciela) z tabeli `auth.users`.       |
-| `front`         | `varchar(200)`             | `NOT NULL`                                                                      | Treść przedniej strony fiszki (pytanie).                             |
-| `back`          | `varchar(500)`             | `NOT NULL`                                                                      | Treść tylnej strony fiszki (odpowiedź).                              |
-| `source`        | `flashcard_source`         | `NOT NULL`                                                                      | Źródło pochodzenia fiszki (`ai` lub `manual`).                       |
-| `leitner_box`   | `smallint`                 | `NOT NULL`, `DEFAULT 1`, `CHECK (leitner_box BETWEEN 1 AND 5)`                  | Numer "pudełka" w systemie Leitnera (1-5).                           |
-| `next_review_at`| `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                                     | Data i czas następnej zaplanowanej powtórki.                         |
-| `created_at`    | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                                     | Data i czas utworzenia rekordu.                                      |
-| `updated_at`    | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                                     | Data i czas ostatniej modyfikacji rekordu.                           |
-| -               | -                          | `UNIQUE (user_id, lower(front))`                                                | Zapobiega tworzeniu przez użytkownika duplikatów fiszek (bez względu na wielkość liter). |
+| Nazwa Kolumny    | Typ Danych                 | Ograniczenia                                                   | Opis                                                                                     |
+| ---------------- | -------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `id`             | `uuid`                     | `PRIMARY KEY`, `DEFAULT gen_random_uuid()`                     | Unikalny identyfikator fiszki.                                                           |
+| `user_id`        | `uuid`                     | `NOT NULL`, `REFERENCES auth.users(id) ON DELETE CASCADE`      | Identyfikator użytkownika (właściciela) z tabeli `auth.users`.                           |
+| `front`          | `varchar(200)`             | `NOT NULL`                                                     | Treść przedniej strony fiszki (pytanie).                                                 |
+| `back`           | `varchar(500)`             | `NOT NULL`                                                     | Treść tylnej strony fiszki (odpowiedź).                                                  |
+| `source`         | `flashcard_source`         | `NOT NULL`                                                     | Źródło pochodzenia fiszki (`ai` lub `manual`).                                           |
+| `leitner_box`    | `smallint`                 | `NOT NULL`, `DEFAULT 1`, `CHECK (leitner_box BETWEEN 1 AND 5)` | Numer "pudełka" w systemie Leitnera (1-5).                                               |
+| `next_review_at` | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                    | Data i czas następnej zaplanowanej powtórki.                                             |
+| `created_at`     | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                    | Data i czas utworzenia rekordu.                                                          |
+| `updated_at`     | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                    | Data i czas ostatniej modyfikacji rekordu.                                               |
+| -                | -                          | `UNIQUE (user_id, lower(front))`                               | Zapobiega tworzeniu przez użytkownika duplikatów fiszek (bez względu na wielkość liter). |
 
 ### Tabela: `ai_suggestions`
 
 Służy jako log wszystkich propozycji fiszek wygenerowanych przez AI w celu śledzenia metryk sukcesu.
 
-| Nazwa Kolumny        | Typ Danych                 | Ograniczenia                                                                    | Opis                                                                  |
-|----------------------|----------------------------|---------------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| `id`                 | `uuid`                     | `PRIMARY KEY`, `DEFAULT gen_random_uuid()`                                      | Unikalny identyfikator sugestii.                                      |
-| `user_id`            | `uuid`                     | `NOT NULL`, `REFERENCES auth.users(id) ON DELETE CASCADE`                       | Identyfikator użytkownika, dla którego wygenerowano sugestię.         |
-| `batch_id`           | `uuid`                     | `NOT NULL`                                                                      | Identyfikator grupy, pozwalający połączyć sugestie z jednego żądania. |
-| `source_text_hash`   | `varchar(64)`              | `NOT NULL`                                                                      | Skrót (SHA-256) oryginalnego tekstu źródłowego.                       |
-| `front_suggestion`   | `varchar(200)`             | `NOT NULL`                                                                      | Zasugerowana treść przedniej strony fiszki.                           |
-| `back_suggestion`    | `varchar(500)`             | `NOT NULL`                                                                      | Zasugerowana treść tylnej strony fiszki.                              |
-| `status`             | `suggestion_status`        | `NOT NULL`, `DEFAULT 'pending'`                                                 | Status weryfikacji sugestii przez użytkownika.                        |
-| `created_at`         | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                                                     | Data i czas utworzenia sugestii.                                      |
+| Nazwa Kolumny      | Typ Danych                 | Ograniczenia                                              | Opis                                                                  |
+| ------------------ | -------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- |
+| `id`               | `uuid`                     | `PRIMARY KEY`, `DEFAULT gen_random_uuid()`                | Unikalny identyfikator sugestii.                                      |
+| `user_id`          | `uuid`                     | `NOT NULL`, `REFERENCES auth.users(id) ON DELETE CASCADE` | Identyfikator użytkownika, dla którego wygenerowano sugestię.         |
+| `batch_id`         | `uuid`                     | `NOT NULL`                                                | Identyfikator grupy, pozwalający połączyć sugestie z jednego żądania. |
+| `source_text_hash` | `varchar(64)`              | `NOT NULL`                                                | Skrót (SHA-256) oryginalnego tekstu źródłowego.                       |
+| `front_suggestion` | `varchar(200)`             | `NOT NULL`                                                | Zasugerowana treść przedniej strony fiszki.                           |
+| `back_suggestion`  | `varchar(500)`             | `NOT NULL`                                                | Zasugerowana treść tylnej strony fiszki.                              |
+| `status`           | `suggestion_status`        | `NOT NULL`, `DEFAULT 'pending'`                           | Status weryfikacji sugestii przez użytkownika.                        |
+| `created_at`       | `timestamp with time zone` | `NOT NULL`, `DEFAULT now()`                               | Data i czas utworzenia sugestii.                                      |
 
 ## 3. Relacje Między Tabelami
 
--   **`auth.users` 1 : N `flashcards`**: Jeden użytkownik może mieć wiele fiszek. Relacja zdefiniowana przez klucz obcy `flashcards.user_id`. Usunięcie użytkownika kaskadowo usuwa wszystkie jego fiszki.
--   **`auth.users` 1 : N `ai_suggestions`**: Jeden użytkownik może mieć wiele sugestii AI. Relacja zdefiniowana przez klucz obcy `ai_suggestions.user_id`. Usunięcie użytkownika kaskadowo usuwa wszystkie jego sugestie.
+- **`auth.users` 1 : N `flashcards`**: Jeden użytkownik może mieć wiele fiszek. Relacja zdefiniowana przez klucz obcy `flashcards.user_id`. Usunięcie użytkownika kaskadowo usuwa wszystkie jego fiszki.
+- **`auth.users` 1 : N `ai_suggestions`**: Jeden użytkownik może mieć wiele sugestii AI. Relacja zdefiniowana przez klucz obcy `ai_suggestions.user_id`. Usunięcie użytkownika kaskadowo usuwa wszystkie jego sugestie.
 
 ## 4. Indeksy
 
@@ -125,6 +125,7 @@ USING (auth.uid() = user_id);
 ## 6. Dodatkowe Uwagi i Decyzje Projektowe
 
 1.  **Automatyczna aktualizacja `updated_at`**: Zaleca się utworzenie funkcji i triggera w bazie danych, które automatycznie będą aktualizować kolumnę `updated_at` w tabeli `flashcards` przy każdej modyfikacji wiersza.
+
     ```sql
     CREATE OR REPLACE FUNCTION handle_updated_at()
     RETURNS TRIGGER AS $$
@@ -139,6 +140,7 @@ USING (auth.uid() = user_id);
     FOR EACH ROW
     EXECUTE PROCEDURE handle_updated_at();
     ```
+
 2.  **Czyszczenie starych sugestii (TTL)**: Niezweryfikowane sugestie (`status = 'pending'`) będą automatycznie usuwane po 30 dniach. Zadanie to będzie realizowane przez mechanizm cron (np. `pg_cron` w Supabase) uruchamiany raz dziennie.
     ```sql
     -- Przykładowe zapytanie dla zadania cron
@@ -146,4 +148,4 @@ USING (auth.uid() = user_id);
     ```
 3.  **Postępowanie z sugestiami**: Po akceptacji sugestii przez użytkownika i utworzeniu na jej podstawie fiszki, wpis w tabeli `ai_suggestions` będzie miał zaktualizowany `status` na `'accepted'`. Nie będzie on usuwany, aby zachować pełne dane do analizy metryk sukcesu.
 4.  **Źródło danych o użytkownikach**: Schemat celowo nie replikuje danych użytkowników (takich jak e-mail). Wykorzystuje wbudowaną w Supabase tabelę `auth.users` jako jedyne źródło prawdy. Dane te mogą być pobierane w aplikacji za pomocą `JOIN`.
-5.  **System Leitnera**: Logika interwałów powtórek (1, 3, 7, 14, 30 dni) oraz aktualizacja `leitner_box` i `next_review_at` będzie zaimplementowana w warstwie aplikacyjnej, co zapewnia większą elastyczność w modyfikacji algorytmu w przyszłości. 
+5.  **System Leitnera**: Logika interwałów powtórek (1, 3, 7, 14, 30 dni) oraz aktualizacja `leitner_box` i `next_review_at` będzie zaimplementowana w warstwie aplikacyjnej, co zapewnia większą elastyczność w modyfikacji algorytmu w przyszłości.

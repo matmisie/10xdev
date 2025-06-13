@@ -8,6 +8,10 @@ declare global {
     interface Locals {
       supabase: SupabaseClient<Database>;
       session: Session | null;
+      user: {
+        email: string | undefined;
+        id: string;
+      } | null;
     }
   }
 }

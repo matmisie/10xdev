@@ -1,9 +1,5 @@
 import { create } from "zustand";
-import type {
-  AiSuggestionDto,
-  GenerateAiSuggestionsCommand,
-  UpdateAiSuggestionCommand,
-} from "@/types";
+import type { AiSuggestionDto, GenerateAiSuggestionsCommand, UpdateAiSuggestionCommand } from "@/types";
 
 interface AiSuggestionsState {
   suggestions: AiSuggestionDto[];
@@ -61,7 +57,7 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
       // Optionally, set an error state to be displayed in the UI
     }
   },
-  rejectSuggestion: async (id:string) => {
+  rejectSuggestion: async (id: string) => {
     try {
       const command: UpdateAiSuggestionCommand = { status: "rejected" };
       const response = await fetch(`/api/ai-suggestions/${id}`, {
@@ -69,7 +65,7 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(command),
       });
-      
+
       if (!response.ok) {
         throw new Error("Nie udało się odrzucić sugestii.");
       }
@@ -84,4 +80,4 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
   clearSuggestions: () => {
     set({ suggestions: [], isLoading: false, error: null });
   },
-})); 
+}));

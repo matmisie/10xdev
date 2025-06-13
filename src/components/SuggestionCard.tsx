@@ -1,12 +1,5 @@
 import type { AiSuggestionDto } from "@/types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 
@@ -17,12 +10,7 @@ interface SuggestionCardProps {
   isProcessing: boolean;
 }
 
-export function SuggestionCard({
-  suggestion,
-  onAccept,
-  onReject,
-  isProcessing,
-}: SuggestionCardProps) {
+export function SuggestionCard({ suggestion, onAccept, onReject, isProcessing }: SuggestionCardProps) {
   const { id, front_suggestion, back_suggestion } = suggestion;
 
   return (
@@ -40,11 +28,7 @@ export function SuggestionCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button
-          variant="outline"
-          onClick={() => onReject(id)}
-          disabled={isProcessing}
-        >
+        <Button variant="outline" onClick={() => onReject(id)} disabled={isProcessing}>
           <X className="mr-2 h-4 w-4" /> Odrzuć
         </Button>
         <Button onClick={() => onAccept(id)} disabled={isProcessing}>
@@ -53,4 +37,4 @@ export function SuggestionCard({
       </CardFooter>
     </Card>
   );
-} 
+}

@@ -1,0 +1,15 @@
+---
+import GradientLayout from "@/layouts/GradientLayout.astro";
+import { AiGeneratorForm } from "@/components/AiGeneratorForm";
+---
+
+<GradientLayout title="Generator Fiszki AI">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-bold">Generator AI</h1>
+    <p class="text-lg text-white/80">
+      Wklej tekst, z którego chcesz stworzyć fiszki.
+    </p>
+  </div>
+  <AiGeneratorForm client:load />
+</GradientLayout>
+

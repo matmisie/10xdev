@@ -1,0 +1,13 @@
+---
+import GradientLayout from "@/layouts/GradientLayout.astro";
+import { LoginForm } from "@/components/auth/LoginForm";
+---
+
+<GradientLayout title="Logowanie">
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-bold">Zaloguj się</h1>
+    <p class="text-lg text-white/80">Witaj z powrotem!</p>
+  </div>
+  <LoginForm client:load />
+</GradientLayout>
+

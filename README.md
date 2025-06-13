@@ -29,6 +29,7 @@ The project uses a modern tech stack focused on performance, developer experienc
 | **Frontend** | [Astro 5](https://astro.build/), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS 4](https://tailwindcss.com/), [Shadcn/ui](https://ui.shadcn.com/) |
 | **Backend**  | [Supabase](https://supabase.com/) (PostgreSQL, Authentication, BaaS)                                                                                                                            |
 | **AI**       | [OpenRouter.ai](https://openrouter.ai/) (Access to various LLMs)                                                                                                                                |
+| **Testing**  | [Vitest](https://vitest.dev/) (Unit & Component), [Playwright](https://playwright.dev/) (E2E)                                                                                                   |
 | **CI/CD**    | [GitHub Actions](https://github.com/features/actions)                                                                                                                                           |
 | **Hosting**  | [DigitalOcean](https://www.digitalocean.com/) (via Docker)                                                                                                                                      |
 

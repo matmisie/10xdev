@@ -5,6 +5,25 @@
  * the database and the API.
  */
 import type { Enums, Tables, TablesInsert, TablesUpdate } from "./db/database.types";
+import { z } from "zod";
+
+// ###########################################################################
+// #
+// # OPEN ROUTER SCHEMAS
+// #
+// ###########################################################################
+
+export const flashcardSchema = z.object({
+  question: z.string().describe("The question or front side of the flashcard."),
+  answer: z.string().describe("The answer or back side of the flashcard."),
+});
+
+export const flashcardSetSchema = z.object({
+  flashcards: z.array(flashcardSchema).describe("An array of generated flashcards."),
+});
+
+export type Flashcard = z.infer<typeof flashcardSchema>;
+export type FlashcardSet = z.infer<typeof flashcardSetSchema>;
 
 // ###########################################################################
 // #

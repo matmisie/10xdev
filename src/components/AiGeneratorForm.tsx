@@ -52,9 +52,7 @@ export function AiGeneratorForm() {
           className="min-h-[200px]"
           disabled={isLoading}
         />
-        {validationMessage && (
-          <p className="text-sm text-red-500">{validationMessage}</p>
-        )}
+        {validationMessage && <p className="text-sm text-red-500">{validationMessage}</p>}
         <p className="text-sm text-muted-foreground">
           Wprowadź od {MIN_TEXT_LENGTH} do {MAX_TEXT_LENGTH} znaków.
         </p>
@@ -64,4 +62,4 @@ export function AiGeneratorForm() {
       </Button>
     </form>
   );
-} 
+}

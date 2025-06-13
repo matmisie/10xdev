@@ -20,6 +20,11 @@
 - Dostęp do szerokiej gamy modeli (OpenAI, Anthropic, Google i wiele innych), które pozwolą nam znaleźć rozwiązanie zapewniające wysoką efektywność i niskie koszta
 - Pozwala na ustawianie limitów finansowych na klucze API
 
+## Testowanie
+
+- **Vitest**: Wykorzystywany do testów jednostkowych i komponentów, zapewniający szybkość i prostą konfigurację.
+- **Playwright**: Służy do testów End-to-End (E2E), które symulują pełne scenariusze użytkownika w przeglądarce.
+
 ## CI/CD i Hosting:
 
 - Github Actions do tworzenia pipeline'ów CI/CD

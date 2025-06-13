@@ -47,8 +47,7 @@ export function SuggestionReviewer() {
       <div className="text-center">
         <h2 className="text-2xl font-bold">Weryfikuj sugestie</h2>
         <p className="text-muted-foreground">
-          Przejrzyj propozycje fiszek. Zaakceptuj, aby dodać je do swojej talii,
-          lub odrzuć.
+          Przejrzyj propozycje fiszek. Zaakceptuj, aby dodać je do swojej talii, lub odrzuć.
         </p>
         {initialCount > 0 && (
           <p className="mt-2 text-sm font-semibold">
@@ -69,4 +68,4 @@ export function SuggestionReviewer() {
       </div>
     </div>
   );
-} 
+}

@@ -12,10 +12,8 @@ export function AiFlashcardGenerator() {
         <AiGeneratorForm />
       </TabsContent>
       <TabsContent value="manual-add">
-        <p className="p-4 text-center text-muted-foreground">
-          Funkcjonalność w trakcie budowy.
-        </p>
+        <p className="p-4 text-center text-muted-foreground">Funkcjonalność w trakcie budowy.</p>
       </TabsContent>
     </Tabs>
   );
-} 
+}
