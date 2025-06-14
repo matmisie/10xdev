@@ -22,7 +22,7 @@ export function AiGeneratorForm() {
     if (!isValid || isLoading) {
       return;
     }
-    generateSuggestions(text);
+    generateSuggestions({ text });
   };
 
   const getValidationMessage = () => {

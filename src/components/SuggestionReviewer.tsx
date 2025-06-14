@@ -1,25 +1,25 @@
 import { useState, useEffect } from "react";
 import { useAiSuggestionsStore } from "@/lib/stores/useAiSuggestionsStore";
 import { SuggestionCard } from "@/components/SuggestionCard";
+import { navigate } from "astro:transitions/client";
+import { Button } from "@/components/ui/button";
 
 export function SuggestionReviewer() {
-  const { suggestions, acceptSuggestion, rejectSuggestion } = useAiSuggestionsStore();
+  const { suggestions, acceptSuggestion, rejectSuggestion, isLoading } = useAiSuggestionsStore();
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [initialCount, setInitialCount] = useState(0);
 
+  // Set the initial total number of suggestions, but only once when they appear.
   useEffect(() => {
-    if (suggestions.length > 0) {
+    if (suggestions.length > 0 && initialCount === 0) {
       setInitialCount(suggestions.length);
     }
-  }, []); // Run only once on mount to capture the initial count
+  }, [suggestions, initialCount]);
 
+  // Handle redirecting when all suggestions have been reviewed.
   useEffect(() => {
-    // If there are no suggestions left and we had some initially, redirect.
     if (initialCount > 0 && suggestions.length === 0) {
-      window.location.href = "/app/flashcards"; // Or wherever the user should go next
-    } else if (initialCount === 0 && suggestions.length === 0) {
-      // If the page is loaded without suggestions, redirect to dashboard.
-      window.location.href = "/app/dashboard";
+      navigate("/app/flashcards");
     }
   }, [suggestions, initialCount]);
 
@@ -35,9 +35,23 @@ export function SuggestionReviewer() {
     setProcessingId(null);
   };
 
+  // While generating suggestions (if user somehow lands here)
+  if (isLoading) {
+    return <p className="text-center">Trwa generowanie sugestii...</p>;
+  }
+
+  // If there are no suggestions AFTER the loading process is complete.
+  // This handles direct access to the page.
   if (suggestions.length === 0) {
-    // Render nothing or a loading/redirecting indicator while useEffect handles redirection.
-    return null;
+    return (
+      <div className="text-center space-y-4">
+        <h2 className="text-2xl font-bold">Brak sugestii do weryfikacji</h2>
+        <p className="text-muted-foreground">
+          Wygląda na to, że nie masz żadnych oczekujących sugestii.
+        </p>
+        <Button onClick={() => navigate("/app/dashboard")}>Wróć do panelu</Button>
+      </div>
+    );
   }
 
   const currentCount = initialCount - suggestions.length + 1;

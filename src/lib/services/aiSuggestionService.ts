@@ -1,7 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/db/database.types";
+import type { Database, Enums } from "@/db/database.types";
 import { v4 as uuidv4 } from "uuid";
 import SHA256 from "crypto-js/sha256";
+import type { UpdateAiSuggestionCommand } from "@/types";
 
 interface FlashcardSuggestion {
   front: string;
@@ -9,6 +10,123 @@ interface FlashcardSuggestion {
 }
 
 export class AiSuggestionService {
+  public async getSuggestions(
+    db: SupabaseClient<Database>,
+    userId: string,
+    status?: Enums<"suggestion_status">,
+  ) {
+    try {
+      let query = db.from("ai_suggestions").select("*").eq("user_id", userId);
+
+      if (status) {
+        query = query.eq("status", status);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching suggestions from database:", error);
+        return { data: null, error: "Failed to fetch suggestions." };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      return { data: null, error: "An unexpected error occurred." };
+    }
+  }
+
+  public async acceptSuggestion(db: SupabaseClient<Database>, suggestionId: string, userId: string) {
+    try {
+      // It's not straightforward to do a transaction with Supabase JS client v2 in edge functions.
+      // A stored procedure (RPC) would be the best way to ensure atomicity.
+      // For now, we'll perform the operations sequentially and accept the small risk of inconsistency.
+
+      // 1. Get the suggestion
+      const { data: suggestion, error: suggestionError } = await db
+        .from("ai_suggestions")
+        .select("*")
+        .eq("id", suggestionId)
+        .eq("user_id", userId)
+        .single();
+
+      if (suggestionError) {
+        console.error("Error fetching suggestion:", suggestionError);
+        return { data: null, error: "Suggestion not found or access denied." };
+      }
+
+      if (suggestion.status !== "pending") {
+        return { data: null, error: "Suggestion has already been processed." };
+      }
+
+      // 2. Create a new flashcard
+      const { data: newFlashcard, error: flashcardError } = await db
+        .from("flashcards")
+        .insert({
+          user_id: userId,
+          front: suggestion.front_suggestion,
+          back: suggestion.back_suggestion,
+          source: "ai",
+        })
+        .select()
+        .single();
+
+      if (flashcardError) {
+        console.error("Error creating flashcard:", flashcardError);
+        // This could be a duplicate, for example.
+        return { data: null, error: "Failed to create flashcard from suggestion." };
+      }
+
+      // 3. Update the suggestion status
+      const { error: updateError } = await db
+        .from("ai_suggestions")
+        .update({ status: "accepted" })
+        .eq("id", suggestionId);
+
+      if (updateError) {
+        // At this point, a flashcard was created but the suggestion status was not updated.
+        // This is where a transaction would be crucial. We'll log the error and return a server error.
+        console.error(
+          `CRITICAL: Flashcard ${newFlashcard.id} created, but failed to update suggestion ${suggestionId} status. Manual cleanup may be required.`,
+          updateError,
+        );
+        return { data: null, error: "Inconsistent state: Flashcard created, but suggestion status not updated." };
+      }
+
+      return { data: newFlashcard, error: null };
+    } catch (error) {
+      console.error("Error accepting suggestion:", error);
+      return { data: null, error: "An unexpected error occurred while accepting the suggestion." };
+    }
+  }
+
+  public async updateSuggestion(
+    db: SupabaseClient<Database>,
+    suggestionId: string,
+    userId: string,
+    command: UpdateAiSuggestionCommand,
+  ) {
+    try {
+      const { data, error } = await db
+        .from("ai_suggestions")
+        .update({ status: command.status })
+        .eq("id", suggestionId)
+        .eq("user_id", userId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error updating suggestion:", error);
+        return { data: null, error: "Failed to update suggestion." };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      console.error("Error updating suggestion:", error);
+      return { data: null, error: "An unexpected error occurred." };
+    }
+  }
+
   public async generateAndStoreSuggestions(text: string, userId: string, db: SupabaseClient<Database>) {
     try {
       const batchId = uuidv4();

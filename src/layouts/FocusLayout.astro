@@ -1,21 +1,25 @@
 ---
 import "../styles/global.css";
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
-  title?: string;
+  title: string;
+  description?: string;
 }
 
-const { title = "Inteligentne Fiszki" } = Astro.props;
+const { title, description = "Aplikacja do nauki z fiszkami" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <ViewTransitions />
   </head>
   <body class="bg-muted">
     <main class="flex min-h-screen items-center justify-center p-4">
