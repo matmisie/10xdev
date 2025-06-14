@@ -100,7 +100,6 @@ export class StudyService {
       .update({
         leitner_box: newLeitnerBox,
         next_review_at: nextReviewDate,
-        last_reviewed_at: new Date().toISOString(),
       })
       .eq("id", flashcardId)
       .select()

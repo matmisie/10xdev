@@ -2,6 +2,8 @@
 import AppLayout from "@/layouts/AppLayout.astro";
 import { AiFlashcardGenerator } from "@/components/AiFlashcardGenerator";
 import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 export const prerender = false;
 
@@ -16,7 +18,7 @@ if (!user) {
 
 <AppLayout title="Dashboard | Inteligentne Fiszki">
   <div class="container flex h-full flex-col items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
-    <div class="w-full max-w-3xl">
+    <div class="w-full max-w-4xl">
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold">Witaj w panelu!</h1>
@@ -27,13 +29,32 @@ if (!user) {
         </form>
       </div>
 
-      <div class="py-8 text-center">
-        <h2 class="mb-4 text-2xl font-bold">Generator fiszek</h2>
-        <p class="mb-6 text-muted-foreground">
-          Wybierz metodę tworzenia nowych fiszek. Możesz skorzystać z pomocy AI, aby automatycznie wygenerować je z
-          Twoich notatek, lub dodać je ręcznie.
-        </p>
-        <AiFlashcardGenerator client:load />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Generator fiszek</CardTitle>
+            <CardDescription>
+              Stwórz nowe fiszki z pomocą AI lub dodaj je ręcznie.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AiFlashcardGenerator client:load />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Sesja Nauki</CardTitle>
+            <CardDescription>
+              Rozpocznij sesję powtórek fiszek zaplanowanych na dziś.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <a href="/app/study" class={buttonVariants({ variant: "default", size: "lg" })}>
+              Rozpocznij naukę
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
+          </CardContent>
+        </Card>
       </div>
     </div>
   </div>

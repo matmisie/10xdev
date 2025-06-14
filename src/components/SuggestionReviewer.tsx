@@ -20,7 +20,7 @@ export function SuggestionReviewer() {
   // Handle redirecting when all suggestions have been reviewed.
   useEffect(() => {
     if (initialCount > 0 && suggestions.length === 0) {
-      navigate("/app/flashcards");
+      navigate("/app/dashboard");
     }
   }, [suggestions, initialCount]);
 

@@ -88,6 +88,21 @@ export interface GradeReviewCommand {
 
 // ###########################################################################
 // #
+// # STUDY SESSION VIEW
+// #
+// ###########################################################################
+
+export type StudySessionStatus = "loading" | "studying" | "empty" | "summary";
+
+export interface StudySessionState {
+  status: StudySessionStatus;
+  cards: FlashcardDto[];
+  currentCardIndex: number;
+  isAnswerVisible: boolean;
+}
+
+// ###########################################################################
+// #
 // # AI SUGGESTIONS RESOURCE
 // #
 // ###########################################################################
