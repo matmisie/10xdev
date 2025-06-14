@@ -1,13 +1,17 @@
 ---
-import GradientLayout from "@/layouts/GradientLayout.astro";
+import PublicLayout from "@/layouts/PublicLayout.astro";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 ---
 
-<GradientLayout title="Rejestracja">
-  <div class="text-center mb-8">
-    <h1 class="text-4xl font-bold">Utwórz nowe konto</h1>
-    <p class="text-lg text-white/80">Dołącz do nas i zacznij tworzyć fiszki!</p>
+<PublicLayout title="Rejestracja">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold">Utwórz nowe konto</h1>
+      <p class="text-lg text-muted-foreground">
+        Dołącz do nas i zacznij tworzyć fiszki!
+      </p>
+    </div>
+    <RegisterForm client:load />
   </div>
-  <RegisterForm client:load />
-</GradientLayout>
+</PublicLayout>
 
