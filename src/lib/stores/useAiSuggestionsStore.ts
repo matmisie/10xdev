@@ -49,19 +49,21 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
   },
 
   acceptSuggestion: async (id: string) => {
+    set({ error: null });
     try {
       const response = await fetch(`/api/ai-suggestions/${id}/accept`, {
         method: "POST",
       });
 
       if (!response.ok) {
-        throw new Error("Nie udało się zaakceptować sugestii.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Błąd serwera: ${response.status}`);
       }
       get().removeSuggestion(id);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Wystąpił nieznany błąd.";
       set({ error: errorMessage });
-      // TODO: Lepsza obsługa błędów, np. toast
+      throw error;
     }
   },
 

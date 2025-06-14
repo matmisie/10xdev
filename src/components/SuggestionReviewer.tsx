@@ -8,6 +8,7 @@ export function SuggestionReviewer() {
   const { suggestions, acceptSuggestion, rejectSuggestion, isLoading } = useAiSuggestionsStore();
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [initialCount, setInitialCount] = useState(0);
+  const [error, setError] = useState<{ id: string; message: string } | null>(null);
 
   // Set the initial total number of suggestions, but only once when they appear.
   useEffect(() => {
@@ -25,8 +26,15 @@ export function SuggestionReviewer() {
 
   const handleAccept = async (id: string) => {
     setProcessingId(id);
-    await acceptSuggestion(id);
-    setProcessingId(null);
+    setError(null);
+    try {
+      await acceptSuggestion(id);
+      setProcessingId(null);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd.";
+      setError({ id, message });
+      setProcessingId(null);
+    }
   };
 
   const handleReject = async (id: string) => {
@@ -77,6 +85,7 @@ export function SuggestionReviewer() {
             onAccept={handleAccept}
             onReject={handleReject}
             isProcessing={processingId === suggestion.id}
+            errorMessage={error && error.id === suggestion.id ? error.message : null}
           />
         ))}
       </div>

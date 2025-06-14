@@ -73,8 +73,10 @@ export class AiSuggestionService {
 
       if (flashcardError) {
         console.error("Error creating flashcard:", flashcardError);
-        // This could be a duplicate, for example.
-        return { data: null, error: "Failed to create flashcard from suggestion." };
+        if (flashcardError.code === "23505") {
+          return { data: null, error: "Fiszka o tej treści już istnieje w Twojej kolekcji." };
+        }
+        return { data: null, error: "Nie udało się utworzyć fiszki na podstawie sugestii." };
       }
 
       // 3. Update the suggestion status

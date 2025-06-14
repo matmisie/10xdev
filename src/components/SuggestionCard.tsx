@@ -8,9 +8,16 @@ interface SuggestionCardProps {
   onAccept: (id: string) => void;
   onReject: (id: string) => void;
   isProcessing: boolean;
+  errorMessage?: string | null;
 }
 
-export function SuggestionCard({ suggestion, onAccept, onReject, isProcessing }: SuggestionCardProps) {
+export function SuggestionCard({
+  suggestion,
+  onAccept,
+  onReject,
+  isProcessing,
+  errorMessage,
+}: SuggestionCardProps) {
   const { id, front_suggestion, back_suggestion } = suggestion;
 
   return (
@@ -35,6 +42,11 @@ export function SuggestionCard({ suggestion, onAccept, onReject, isProcessing }:
           <Check className="mr-2 h-4 w-4" /> Akceptuj
         </Button>
       </CardFooter>
+      {errorMessage && (
+        <CardFooter>
+          <p className="w-full text-center text-sm text-red-500">{errorMessage}</p>
+        </CardFooter>
+      )}
     </Card>
   );
 }
