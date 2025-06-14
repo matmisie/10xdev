@@ -37,13 +37,13 @@ const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({
         )}
         <CardFooter className="flex justify-end gap-4">
           {!isAnswerVisible ? (
-            <Button onClick={onShowAnswer}>Pokaż odpowiedź</Button>
+            <Button onClick={onShowAnswer} data-test-id="show-answer-button">Pokaż odpowiedź</Button>
           ) : (
             <>
-              <Button variant="outline" onClick={() => onGradeAnswer("incorrect")}>
+              <Button variant="outline" onClick={() => onGradeAnswer("incorrect")} data-test-id="grade-incorrect-button">
                 Nie wiedziałem
               </Button>
-              <Button onClick={() => onGradeAnswer("correct")}>Wiedziałem</Button>
+              <Button onClick={() => onGradeAnswer("correct")} data-test-id="grade-correct-button">Wiedziałem</Button>
             </>
           )}
         </CardFooter>

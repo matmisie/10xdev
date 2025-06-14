@@ -12,7 +12,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ reviewedCount, correctA
 
   return (
     <div className="flex h-full items-center justify-center">
-      <Card className="w-full max-w-2xl text-center">
+      <Card className="w-full max-w-2xl text-center" data-test-id="session-summary-card">
         <CardHeader>
           <CardTitle>Sesja zakończona!</CardTitle>
           <CardDescription>Gratulacje!</CardDescription>
@@ -27,7 +27,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ reviewedCount, correctA
         </CardContent>
         <CardFooter className="flex justify-center">
           <a href="/app/dashboard">
-            <Button>Wróć do panelu</Button>
+            <Button data-test-id="back-to-dashboard-button">Wróć do panelu</Button>
           </a>
         </CardFooter>
       </Card>

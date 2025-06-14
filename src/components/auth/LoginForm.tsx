@@ -55,6 +55,7 @@ export function LoginForm() {
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
+              data-test-id="login-email-input"
               id="email"
               type="email"
               placeholder="email@example.com"
@@ -67,6 +68,7 @@ export function LoginForm() {
           <div className="grid gap-2">
             <Label htmlFor="password">Hasło</Label>
             <Input
+              data-test-id="login-password-input"
               id="password"
               type="password"
               required
@@ -80,7 +82,7 @@ export function LoginForm() {
           )}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button data-test-id="login-submit-button" type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Logowanie..." : "Zaloguj się"}
           </Button>
         </CardFooter>

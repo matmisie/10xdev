@@ -21,7 +21,7 @@ export function SuggestionCard({
   const { id, front_suggestion, back_suggestion } = suggestion;
 
   return (
-    <Card>
+    <Card data-test-id={`suggestion-card-${id}`}>
       <CardHeader>
         <CardTitle>Pytanie</CardTitle>
         <CardDescription>{front_suggestion}</CardDescription>
@@ -35,10 +35,10 @@ export function SuggestionCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline" onClick={() => onReject(id)} disabled={isProcessing}>
+        <Button data-test-id="reject-suggestion-button" variant="outline" onClick={() => onReject(id)} disabled={isProcessing}>
           <X className="mr-2 h-4 w-4" /> Odrzuć
         </Button>
-        <Button onClick={() => onAccept(id)} disabled={isProcessing}>
+        <Button data-test-id="accept-suggestion-button" onClick={() => onAccept(id)} disabled={isProcessing}>
           <Check className="mr-2 h-4 w-4" /> Akceptuj
         </Button>
       </CardFooter>

@@ -43,6 +43,7 @@ export function AiGeneratorForm() {
       <div className="grid w-full gap-2">
         <Label htmlFor="ai-text-input">Wklej swój tekst źródłowy</Label>
         <Textarea
+          data-test-id="ai-text-input"
           id="ai-text-input"
           placeholder="Wklej tutaj swoje notatki, artykuł lub dowolny tekst, z którego chcesz stworzyć fiszki."
           value={text}
@@ -57,7 +58,7 @@ export function AiGeneratorForm() {
           Wprowadź od {MIN_TEXT_LENGTH} do {MAX_TEXT_LENGTH} znaków.
         </p>
       </div>
-      <Button type="submit" disabled={!isValid || isLoading} className="w-full">
+      <Button data-test-id="ai-generate-button" type="submit" disabled={!isValid || isLoading} className="w-full">
         {isLoading ? "Generowanie..." : "Generuj fiszki"}
       </Button>
     </form>
