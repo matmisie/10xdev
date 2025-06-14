@@ -1,6 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useAiSuggestionsStore } from "./useAiSuggestionsStore";
-import type { AiSuggestionDto } from "@/types";
+import type { AiSuggestionDto, GenerateAiSuggestionsCommand } from "@/types";
+
+vi.mock("astro:transitions/client", () => ({
+  navigate: vi.fn(),
+}));
+import { navigate } from "astro:transitions/client";
 
 // Mockowanie globalnego obiektu fetch
 const mockFetch = vi.fn();
@@ -22,26 +27,26 @@ const mockSuccessResponse = (suggestions: AiSuggestionDto[]) => ({
   json: () => Promise.resolve(suggestions),
 });
 
-const mockErrorResponse = (statusText: string) => ({
+const mockErrorResponse = (status: number, statusText: string, body: string = "") => ({
   ok: false,
-  status: 500,
+  status,
   statusText,
+  text: () => Promise.resolve(body),
 });
 
 describe("useAiSuggestionsStore - generateSuggestions", () => {
   beforeEach(() => {
     // Resetowanie stanu store'u i mocków przed każdym testem
     useAiSuggestionsStore.getState().clearSuggestions();
-    mockFetch.mockClear();
-    window.location.href = "";
+    vi.clearAllMocks();
   });
 
   it("should set loading state to true and reset error when starting generation", async () => {
-    const text = "Przykładowy tekst do generowania fiszek.";
+    const command: GenerateAiSuggestionsCommand = { text: "Przykładowy tekst do generowania fiszek." };
     useAiSuggestionsStore.setState({ error: "Poprzedni błąd" });
 
     // Rozpoczynamy wywołanie, ale nie czekamy na jego zakończenie
-    const promise = useAiSuggestionsStore.getState().generateSuggestions(text);
+    const promise = useAiSuggestionsStore.getState().generateSuggestions(command);
 
     // Sprawdzamy stan natychmiast po wywołaniu
     expect(useAiSuggestionsStore.getState().isLoading).toBe(true);
@@ -53,7 +58,7 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
   });
 
   it("should handle successful suggestion generation and redirect", async () => {
-    const text = "To jest tekst, który na pewno zadziała.";
+    const command: GenerateAiSuggestionsCommand = { text: "To jest tekst, który na pewno zadziała." };
     const mockSuggestions: AiSuggestionDto[] = [
       {
         id: "1",
@@ -77,13 +82,13 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
 
     mockFetch.mockResolvedValue(mockSuccessResponse(mockSuggestions));
 
-    await useAiSuggestionsStore.getState().generateSuggestions(text);
+    await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     // Weryfikacja wywołania fetch
     expect(mockFetch).toHaveBeenCalledWith("/api/ai-suggestions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text: command.text }),
     });
 
     // Weryfikacja stanu store'u
@@ -93,32 +98,31 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
     expect(state.error).toBe(null);
 
     // Weryfikacja przekierowania
-    expect(window.location.href).toBe("/app/review-suggestions");
+    expect(navigate).toHaveBeenCalledWith("/app/review-suggestions");
   });
 
   it("should handle API errors gracefully", async () => {
-    const text = "Tekst, który spowoduje błąd API.";
-    const errorMessage = "Nie udało się wygenerować sugestii.";
-
-    mockFetch.mockResolvedValue(mockErrorResponse("Internal Server Error"));
-
-    await useAiSuggestionsStore.getState().generateSuggestions(text);
+    const command: GenerateAiSuggestionsCommand = { text: "Tekst, który spowoduje błąd API." };
+    
+    mockFetch.mockResolvedValue(mockErrorResponse(500, "Internal Server Error", "Internal error"));
+    
+    await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     // Weryfikacja stanu store'u
     const state = useAiSuggestionsStore.getState();
     expect(state.isLoading).toBe(false);
     expect(state.suggestions).toEqual([]);
-    expect(state.error).toBe(errorMessage);
-    expect(window.location.href).toBe(""); // Nie powinno być przekierowania
+    expect(state.error).toContain("Błąd serwera: 500");
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it("should handle network errors gracefully", async () => {
-    const text = "Tekst, który spowoduje błąd sieciowy.";
+    const command: GenerateAiSuggestionsCommand = { text: "Tekst, który spowoduje błąd sieciowy."};
     const networkErrorMessage = "Network request failed";
 
     mockFetch.mockRejectedValue(new Error(networkErrorMessage));
 
-    await useAiSuggestionsStore.getState().generateSuggestions(text);
+    await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     // Weryfikacja stanu store'u
     const state = useAiSuggestionsStore.getState();
@@ -128,19 +132,19 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
   });
 
   it("should ensure isLoading is set to false after a successful request", async () => {
-    const text = "Upewnij się, że ładowanie jest wyłączone po sukcesie.";
+    const command: GenerateAiSuggestionsCommand = { text: "Upewnij się, że ładowanie jest wyłączone po sukcesie." };
     mockFetch.mockResolvedValue(mockSuccessResponse([]));
 
-    await useAiSuggestionsStore.getState().generateSuggestions(text);
+    await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     expect(useAiSuggestionsStore.getState().isLoading).toBe(false);
   });
 
   it("should ensure isLoading is set to false after a failed request", async () => {
-    const text = "Upewnij się, że ładowanie jest wyłączone po błędzie.";
+    const command: GenerateAiSuggestionsCommand = { text: "Upewnij się, że ładowanie jest wyłączone po błędzie." };
     mockFetch.mockRejectedValue(new Error("Błąd"));
 
-    await useAiSuggestionsStore.getState().generateSuggestions(text);
+    await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     expect(useAiSuggestionsStore.getState().isLoading).toBe(false);
   });
