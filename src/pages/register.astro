@@ -4,14 +4,12 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 ---
 
 <PublicLayout title="Rejestracja">
-  <div class="w-full max-w-md">
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold">Utwórz nowe konto</h1>
-      <p class="text-lg text-muted-foreground">
-        Dołącz do nas i zacznij tworzyć fiszki!
-      </p>
-    </div>
+  <div class="w-full max-w-sm space-y-4">
     <RegisterForm client:load />
+    <p class="text-center text-sm text-muted-foreground">
+      Masz już konto?
+      <a href="/login" class="font-semibold underline"> Zaloguj się </a>
+    </p>
   </div>
 </PublicLayout>
 

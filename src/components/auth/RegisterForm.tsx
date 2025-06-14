@@ -9,13 +9,20 @@ import { useState } from "react";
 export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
     setError(null);
+
+    if (password !== confirmPassword) {
+      setError("Hasła nie są takie same.");
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/auth/register", {
@@ -42,11 +49,17 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto">
+    <Card>
       <form onSubmit={handleSubmit}>
+        <CardHeader>
+          <CardTitle>Utwórz nowe konto</CardTitle>
+          <CardDescription>
+            Dołącz do nas i zacznij tworzyć fiszki!
+          </CardDescription>
+        </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email" className="text-white/80">Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
@@ -54,50 +67,41 @@ export function RegisterForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white"
               disabled={isLoading}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password" className="text-white/80">Hasło</Label>
+            <Label htmlFor="password">Hasło</Label>
             <Input
               id="password"
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white"
               disabled={isLoading}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="confirm-password" className="text-white/80">Potwierdź hasło</Label>
+            <Label htmlFor="confirm-password">Potwierdź hasło</Label>
             <Input
               id="confirm-password"
               type="password"
               required
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               disabled={isLoading}
             />
           </div>
           {error && (
-            <div className="text-red-400 bg-red-900/50 border border-red-500/50 rounded-lg p-3 text-sm font-medium" role="alert">
-              {error}
-            </div>
+            <p className="text-sm text-destructive">{error}</p>
           )}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full bg-white text-black hover:bg-gray-200" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading}>
              {isLoading ? "Tworzenie konta..." : "Utwórz konto"}
           </Button>
-          <p className="text-center text-sm text-white/60">
-            Masz już konto?{" "}
-            <a href="/login" className="font-semibold text-white/90 hover:text-white underline">
-              Zaloguj się
-            </a>
-          </p>
         </CardFooter>
       </form>
-    </div>
+    </Card>
   );
 }

@@ -43,11 +43,17 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto">
+    <Card>
       <form onSubmit={handleSubmit}>
+        <CardHeader>
+          <CardTitle>Logowanie</CardTitle>
+          <CardDescription>
+            Witaj z powrotem! Zaloguj się, aby kontynuować.
+          </CardDescription>
+        </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email" className="text-white/80">Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
@@ -55,40 +61,30 @@ export function LoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white"
               disabled={isLoading}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password" className="text-white/80">Hasło</Label>
+            <Label htmlFor="password">Hasło</Label>
             <Input
               id="password"
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-white focus:border-white"
               disabled={isLoading}
             />
           </div>
           {error && (
-            <div className="text-red-400 bg-red-900/50 border border-red-500/50 rounded-lg p-3 text-sm font-medium" role="alert">
-              {error}
-            </div>
+            <p className="text-sm text-destructive">{error}</p>
           )}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full bg-white text-black hover:bg-gray-200" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Logowanie..." : "Zaloguj się"}
           </Button>
-          <p className="text-center text-sm text-white/60">
-            Nie masz konta?{" "}
-            <a href="/register" className="font-semibold text-white/90 hover:text-white underline">
-              Zarejestruj się
-            </a>
-          </p>
         </CardFooter>
       </form>
-    </div>
+    </Card>
   );
 }

@@ -4,12 +4,14 @@ import { LoginForm } from "@/components/auth/LoginForm";
 ---
 
 <PublicLayout title="Logowanie">
-  <div class="w-full max-w-md">
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold">Zaloguj się</h1>
-      <p class="text-lg text-muted-foreground">Witaj z powrotem!</p>
-    </div>
+  <div class="w-full max-w-sm space-y-4">
     <LoginForm client:load />
+    <p class="text-center text-sm text-muted-foreground">
+      Nie masz jeszcze konta?
+      <a href="/register" class="font-semibold underline">
+        Zarejestruj się
+      </a>
+    </p>
   </div>
 </PublicLayout>
 
