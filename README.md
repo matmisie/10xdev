@@ -1,6 +1,6 @@
 # Inteligentne Fiszki (Smart Flashcards)
 
-PR test
+PR test 2
 
 [![Project Status: In Development](https://img.shields.io/badge/status-in_development-blueviolet.svg)](https://shields.io)
 
