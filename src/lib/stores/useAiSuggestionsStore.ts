@@ -37,8 +37,11 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
 
       const suggestions: AiSuggestionDto[] = await response.json();
       console.log("Sugestie pomyślnie sparsowane:", suggestions);
+      
+      // Krok 1: Ustaw stan z nowymi sugestiami
       set({ suggestions, isLoading: false });
 
+      // Krok 2: Przekieruj na stronę weryfikacji
       console.log("Próba przekierowania na /app/review-suggestions");
       await navigate("/app/review-suggestions");
     } catch (error) {

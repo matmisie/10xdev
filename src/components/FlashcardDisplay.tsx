@@ -36,16 +36,29 @@ const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({
           </>
         )}
         <CardFooter className="flex justify-end gap-4">
-          {!isAnswerVisible ? (
-            <Button onClick={onShowAnswer} data-test-id="show-answer-button">Pokaż odpowiedź</Button>
-          ) : (
-            <>
-              <Button variant="outline" onClick={() => onGradeAnswer("incorrect")} data-test-id="grade-incorrect-button">
-                Nie wiedziałem
-              </Button>
-              <Button onClick={() => onGradeAnswer("correct")} data-test-id="grade-correct-button">Wiedziałem</Button>
-            </>
-          )}
+          <Button 
+            onClick={onShowAnswer} 
+            data-test-id="show-answer-button"
+            className={isAnswerVisible ? 'hidden' : 'inline-flex'}
+          >
+            Pokaż odpowiedź
+          </Button>
+
+          <div className={isAnswerVisible ? 'flex justify-end gap-4' : 'hidden'}>
+            <Button 
+              variant="outline" 
+              onClick={() => onGradeAnswer("incorrect")} 
+              data-test-id="grade-incorrect-button"
+            >
+              Nie wiedziałem
+            </Button>
+            <Button 
+              onClick={() => onGradeAnswer("correct")} 
+              data-test-id="grade-correct-button"
+            >
+              Wiedziałem
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </div>

@@ -18,8 +18,8 @@ export class LoginPage {
   }
 
   async login(email: string, password_val: string) {
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password_val);
+    await this.emailInput.pressSequentially(email, { delay: 50 });
+    await this.passwordInput.pressSequentially(password_val, { delay: 50 });
     await this.submitButton.click();
   }
 } 

@@ -1,4 +1,4 @@
-import { type Page, type Locator } from "@playwright/test";
+import { type Page, type Locator, expect } from "@playwright/test";
 
 export class DashboardPage {
   readonly page: Page;
@@ -23,6 +23,7 @@ export class DashboardPage {
 
   async generateAiSuggestions(text: string) {
     await this.aiTextInput.fill(text);
+    await expect(this.generateFlashcardsButton).toBeEnabled();
     await this.generateFlashcardsButton.click();
   }
 } 
