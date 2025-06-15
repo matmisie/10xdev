@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@astrojs/react": "^4.3.0",
+    "@c88/v8-coverage": "^0.1.1",
     "@eslint/compat": "1.2.7",
     "@eslint/js": "9.23.0",
     "@faker-js/faker": "^9.8.0",
@@ -70,11 +71,13 @@
     "husky": "9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "15.5.0",
+    "nyc": "^17.1.0",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript-eslint": "8.28.0",
+    "vite-plugin-istanbul": "^7.0.0",
     "vitest": "^3.2.3"
   },
   "lint-staged": {
