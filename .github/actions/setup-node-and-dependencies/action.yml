@@ -1,11 +1,8 @@
 name: "Setup Node.js and Install Dependencies"
-description: "Checks out code, sets up Node.js, and installs npm dependencies using cache."
+description: "Sets up Node.js and installs npm dependencies using cache. Assumes code is already checked out."
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
