@@ -81,8 +81,12 @@ jobs:
           E2E_USERNAME: ${{ vars.E2E_USERNAME }}
           E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
-      - name: Generate coverage report
-        run: npx nyc report
+      - name: Upload playwright report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4

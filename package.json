@@ -10,7 +10,7 @@
     "astro": "astro",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest --watch",
-    "test:e2e": "playwright test",
+    "test:e2e": "c8 --reporter=lcov --reporter=text --report-dir=coverage/e2e playwright test",
     "test:e2e:ui": "playwright test --ui",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
