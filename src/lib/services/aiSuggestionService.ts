@@ -10,11 +10,7 @@ interface FlashcardSuggestion {
 }
 
 export class AiSuggestionService {
-  public async getSuggestions(
-    db: SupabaseClient<Database>,
-    userId: string,
-    status?: Enums<"suggestion_status">,
-  ) {
+  public async getSuggestions(db: SupabaseClient<Database>, userId: string, status?: Enums<"suggestion_status">) {
     try {
       let query = db.from("ai_suggestions").select("*").eq("user_id", userId);
 
@@ -25,13 +21,11 @@ export class AiSuggestionService {
       const { data, error } = await query;
 
       if (error) {
-        console.error("Error fetching suggestions from database:", error);
         return { data: null, error: "Failed to fetch suggestions." };
       }
 
       return { data, error: null };
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
+    } catch {
       return { data: null, error: "An unexpected error occurred." };
     }
   }
@@ -51,7 +45,6 @@ export class AiSuggestionService {
         .single();
 
       if (suggestionError) {
-        console.error("Error fetching suggestion:", suggestionError);
         return { data: null, error: "Suggestion not found or access denied." };
       }
 
@@ -72,7 +65,6 @@ export class AiSuggestionService {
         .single();
 
       if (flashcardError) {
-        console.error("Error creating flashcard:", flashcardError);
         if (flashcardError.code === "23505") {
           return { data: null, error: "Fiszka o tej treści już istnieje w Twojej kolekcji." };
         }
@@ -88,16 +80,11 @@ export class AiSuggestionService {
       if (updateError) {
         // At this point, a flashcard was created but the suggestion status was not updated.
         // This is where a transaction would be crucial. We'll log the error and return a server error.
-        console.error(
-          `CRITICAL: Flashcard ${newFlashcard.id} created, but failed to update suggestion ${suggestionId} status. Manual cleanup may be required.`,
-          updateError,
-        );
         return { data: null, error: "Inconsistent state: Flashcard created, but suggestion status not updated." };
       }
 
       return { data: newFlashcard, error: null };
-    } catch (error) {
-      console.error("Error accepting suggestion:", error);
+    } catch {
       return { data: null, error: "An unexpected error occurred while accepting the suggestion." };
     }
   }
@@ -106,7 +93,7 @@ export class AiSuggestionService {
     db: SupabaseClient<Database>,
     suggestionId: string,
     userId: string,
-    command: UpdateAiSuggestionCommand,
+    command: UpdateAiSuggestionCommand
   ) {
     try {
       const { data, error } = await db
@@ -118,13 +105,11 @@ export class AiSuggestionService {
         .single();
 
       if (error) {
-        console.error("Error updating suggestion:", error);
         return { data: null, error: "Failed to update suggestion." };
       }
 
       return { data, error: null };
-    } catch (error) {
-      console.error("Error updating suggestion:", error);
+    } catch {
       return { data: null, error: "An unexpected error occurred." };
     }
   }
@@ -154,8 +139,6 @@ ${text}
       });
 
       if (!response.ok) {
-        console.error("OpenRouter API error:", response.status, response.statusText);
-        // In a real app, you'd throw a custom error to be caught by the controller
         return { data: null, error: "Failed to fetch suggestions from AI service." };
       }
 
@@ -176,13 +159,11 @@ ${text}
       const { data, error } = await db.from("ai_suggestions").insert(suggestionsToInsert).select();
 
       if (error) {
-        console.error("Error inserting suggestions into database:", error);
         return { data: null, error: "Failed to save suggestions." };
       }
 
       return { data, error: null };
-    } catch (error) {
-      console.error("Error generating AI suggestions:", error);
+    } catch {
       return { data: null, error: "An unexpected error occurred." };
     }
   }

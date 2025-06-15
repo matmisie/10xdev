@@ -37,12 +37,15 @@ export function RegisterForm() {
         const errorData = await response.json();
         throw new Error(errorData.error || "Wystąpił nieznany błąd podczas rejestracji.");
       }
-      
+
       // On successful registration, redirect immediately.
       window.location.href = "/app/dashboard";
-
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Wystąpił nieznany błąd podczas rejestracji.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -53,9 +56,7 @@ export function RegisterForm() {
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle>Utwórz nowe konto</CardTitle>
-          <CardDescription>
-            Dołącz do nas i zacznij tworzyć fiszki!
-          </CardDescription>
+          <CardDescription>Dołącz do nas i zacznij tworzyć fiszki!</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
@@ -92,13 +93,11 @@ export function RegisterForm() {
               disabled={isLoading}
             />
           </div>
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button type="submit" className="w-full" disabled={isLoading}>
-             {isLoading ? "Tworzenie konta..." : "Utwórz konto"}
+            {isLoading ? "Tworzenie konta..." : "Utwórz konto"}
           </Button>
         </CardFooter>
       </form>

@@ -54,9 +54,7 @@ export function SuggestionReviewer() {
     return (
       <div className="text-center space-y-4">
         <h2 className="text-2xl font-bold">Brak sugestii do weryfikacji</h2>
-        <p className="text-muted-foreground">
-          Wygląda na to, że nie masz żadnych oczekujących sugestii.
-        </p>
+        <p className="text-muted-foreground">Wygląda na to, że nie masz żadnych oczekujących sugestii.</p>
         <Button onClick={() => navigate("/app/dashboard")}>Wróć do panelu</Button>
       </div>
     );

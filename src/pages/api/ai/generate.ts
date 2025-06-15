@@ -3,7 +3,7 @@ import { OpenRouterService } from "src/lib/openrouter.service";
 import { ApiError, ValidationError } from "src/lib/errors";
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const { session, supabase } = locals;
+  const { session } = locals;
 
   if (!session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
@@ -34,7 +34,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response(JSON.stringify({ error: error.message }), { status: error.status });
     }
 
-    console.error(error);
     return new Response(JSON.stringify({ error: "An unexpected error occurred." }), { status: 500 });
   }
 };

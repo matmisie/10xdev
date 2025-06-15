@@ -26,4 +26,4 @@ export class DashboardPage {
     await expect(this.generateFlashcardsButton).toBeEnabled();
     await this.generateFlashcardsButton.click();
   }
-} 
+}

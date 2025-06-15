@@ -30,13 +30,16 @@ export function LoginForm() {
         const errorData = await response.json();
         throw new Error(errorData.error || "Wystąpił nieznany błąd.");
       }
-      
+
       // On successful login, the server session is set.
       // We just need to navigate to the protected page.
       window.location.href = "/app/dashboard";
-
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Wystąpił nieznany błąd.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -47,9 +50,7 @@ export function LoginForm() {
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle>Logowanie</CardTitle>
-          <CardDescription>
-            Witaj z powrotem! Zaloguj się, aby kontynuować.
-          </CardDescription>
+          <CardDescription>Witaj z powrotem! Zaloguj się, aby kontynuować.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
@@ -77,9 +78,7 @@ export function LoginForm() {
               disabled={isLoading}
             />
           </div>
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
           <Button data-test-id="login-submit-button" type="submit" className="w-full" disabled={isLoading}>

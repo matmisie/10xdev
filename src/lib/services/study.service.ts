@@ -49,8 +49,6 @@ export class StudyService {
       .lte("next_review_at", today);
 
     if (error) {
-      // TODO: Add proper logging
-      console.error("Error fetching review deck:", error);
       throw new Error("Could not fetch flashcards for review.");
     }
 
@@ -66,11 +64,7 @@ export class StudyService {
    * @returns A promise that resolves to the updated flashcard DTO.
    * @throws {Error} if the flashcard is not found or cannot be updated.
    */
-  async gradeFlashcard(
-    flashcardId: string,
-    userId: string,
-    outcome: ReviewOutcome,
-  ): Promise<FlashcardDto> {
+  async gradeFlashcard(flashcardId: string, userId: string, outcome: ReviewOutcome): Promise<FlashcardDto> {
     // 1. Fetch the current flashcard to get its leitner_box
     const { data: currentFlashcard, error: fetchError } = await this.supabase
       .from("flashcards")
@@ -106,11 +100,9 @@ export class StudyService {
       .single();
 
     if (updateError || !updatedFlashcard) {
-      // TODO: Add proper logging
-      console.error("Error updating flashcard:", updateError);
       throw new Error("Could not update the flashcard.");
     }
 
     return updatedFlashcard;
   }
-} 
+}

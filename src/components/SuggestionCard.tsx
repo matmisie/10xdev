@@ -11,13 +11,7 @@ interface SuggestionCardProps {
   errorMessage?: string | null;
 }
 
-export function SuggestionCard({
-  suggestion,
-  onAccept,
-  onReject,
-  isProcessing,
-  errorMessage,
-}: SuggestionCardProps) {
+export function SuggestionCard({ suggestion, onAccept, onReject, isProcessing, errorMessage }: SuggestionCardProps) {
   const { id, front_suggestion, back_suggestion } = suggestion;
 
   return (
@@ -35,7 +29,12 @@ export function SuggestionCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button data-test-id="reject-suggestion-button" variant="outline" onClick={() => onReject(id)} disabled={isProcessing}>
+        <Button
+          data-test-id="reject-suggestion-button"
+          variant="outline"
+          onClick={() => onReject(id)}
+          disabled={isProcessing}
+        >
           <X className="mr-2 h-4 w-4" /> Odrzuć
         </Button>
         <Button data-test-id="accept-suggestion-button" onClick={() => onAccept(id)} disabled={isProcessing}>

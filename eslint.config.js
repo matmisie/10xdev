@@ -9,11 +9,21 @@ import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import tseslint from "typescript-eslint";
+import globals from "globals";
 
 // File path setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, ".gitignore");
+
+const mjsConfig = tseslint.config({
+  files: ["**/*.mjs"],
+  languageOptions: {
+    globals: {
+      ...globals.node,
+    },
+  },
+});
 
 const baseConfig = tseslint.config({
   extends: [eslint.configs.recommended, tseslint.configs.strict, tseslint.configs.stylistic],
@@ -59,6 +69,7 @@ const reactConfig = tseslint.config({
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
+  mjsConfig,
   jsxA11yConfig,
   reactConfig,
   eslintPluginAstro.configs["flat/recommended"],

@@ -2,7 +2,7 @@ import { type Page, type Locator } from "@playwright/test";
 
 export class SuggestionReviewPage {
   readonly page: Page;
-  
+
   constructor(page: Page) {
     this.page = page;
   }
@@ -32,4 +32,4 @@ export class SuggestionReviewPage {
   async getAllSuggestionCards(): Promise<Locator[]> {
     return this.page.locator('[data-test-id^="suggestion-card-"]').all();
   }
-} 
+}

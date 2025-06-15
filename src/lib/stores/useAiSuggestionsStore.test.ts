@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useAiSuggestionsStore } from "./useAiSuggestionsStore";
 import type { AiSuggestionDto, GenerateAiSuggestionsCommand } from "@/types";
 
@@ -12,14 +12,12 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mockowanie globalnego obiektu window.location
-const originalLocation = window.location;
 beforeAll(() => {
-  // @ts-ignore
-  delete window.location;
-  window.location = { ...originalLocation, href: "" };
-});
-afterAll(() => {
-  window.location = originalLocation;
+  const location = {
+    ...window.location,
+    href: "",
+  };
+  vi.spyOn(window, "location", "get").mockImplementation(() => location);
 });
 
 const mockSuccessResponse = (suggestions: AiSuggestionDto[]) => ({
@@ -27,7 +25,7 @@ const mockSuccessResponse = (suggestions: AiSuggestionDto[]) => ({
   json: () => Promise.resolve(suggestions),
 });
 
-const mockErrorResponse = (status: number, statusText: string, body: string = "") => ({
+const mockErrorResponse = (status: number, statusText: string, body = "") => ({
   ok: false,
   status,
   statusText,
@@ -103,9 +101,9 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
 
   it("should handle API errors gracefully", async () => {
     const command: GenerateAiSuggestionsCommand = { text: "Tekst, który spowoduje błąd API." };
-    
+
     mockFetch.mockResolvedValue(mockErrorResponse(500, "Internal Server Error", "Internal error"));
-    
+
     await useAiSuggestionsStore.getState().generateSuggestions(command);
 
     // Weryfikacja stanu store'u
@@ -117,7 +115,7 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
   });
 
   it("should handle network errors gracefully", async () => {
-    const command: GenerateAiSuggestionsCommand = { text: "Tekst, który spowoduje błąd sieciowy."};
+    const command: GenerateAiSuggestionsCommand = { text: "Tekst, który spowoduje błąd sieciowy." };
     const networkErrorMessage = "Network request failed";
 
     mockFetch.mockRejectedValue(new Error(networkErrorMessage));
@@ -148,4 +146,4 @@ describe("useAiSuggestionsStore - generateSuggestions", () => {
 
     expect(useAiSuggestionsStore.getState().isLoading).toBe(false);
   });
-}); 
+});

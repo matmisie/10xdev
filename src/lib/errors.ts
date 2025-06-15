@@ -11,7 +11,7 @@ export class ApiError extends Error {
 export class ValidationError extends Error {
   constructor(
     message: string,
-    public readonly validationIssues?: any
+    public readonly validationIssues?: Record<string, string[]>
   ) {
     super(message);
     this.name = "ValidationError";

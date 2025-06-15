@@ -1,16 +1,7 @@
 {
   "all": true,
-  "include": [
-    "src/**/*.{ts,tsx,astro,js,jsx}"
-  ],
-  "exclude": [
-    "src/test",
-    "src/env.d.ts"
-  ],
-  "reporter": [
-    "lcov",
-    "text",
-    "json-summary"
-  ],
+  "include": ["src/**/*.{ts,tsx,astro,js,jsx}"],
+  "exclude": ["src/test", "src/env.d.ts"],
+  "reporter": ["lcov", "text", "json-summary"],
   "report-dir": "coverage/e2e"
-} 
+}

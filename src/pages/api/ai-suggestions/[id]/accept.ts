@@ -45,10 +45,17 @@ export const POST: APIRoute = async ({ params, locals }) => {
     });
   }
 
-  const responseDto: FlashcardDto = data!;
+  if (!data) {
+    return new Response(JSON.stringify({ message: "Failed to accept suggestion: data is null" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const responseDto: FlashcardDto = data;
 
   return new Response(JSON.stringify(responseDto), {
     status: 201, // 201 Created
     headers: { "Content-Type": "application/json" },
   });
-}; 
+};

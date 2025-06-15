@@ -19,7 +19,6 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
   error: null,
   generateSuggestions: async ({ text }) => {
     set({ isLoading: true, error: null });
-    console.log("Rozpoczynam generowanie sugestii...");
     try {
       const response = await fetch("/api/ai-suggestions", {
         method: "POST",
@@ -27,26 +26,20 @@ export const useAiSuggestionsStore = create<AiSuggestionsState>((set, get) => ({
         body: JSON.stringify({ text }),
       });
 
-      console.log("Odpowiedź z API otrzymana, status:", response.status);
-
       if (!response.ok) {
-        const errorBody = await response.text();
-        console.error("Błąd odpowiedzi API:", errorBody);
+        await response.text();
         throw new Error(`Błąd serwera: ${response.status}.`);
       }
 
       const suggestions: AiSuggestionDto[] = await response.json();
-      console.log("Sugestie pomyślnie sparsowane:", suggestions);
-      
+
       // Krok 1: Ustaw stan z nowymi sugestiami
       set({ suggestions, isLoading: false });
 
       // Krok 2: Przekieruj na stronę weryfikacji
-      console.log("Próba przekierowania na /app/review-suggestions");
       await navigate("/app/review-suggestions");
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Wystąpił nieznany błąd.";
-      console.error("Szczegółowy błąd w bloku catch:", error);
       set({ error: errorMessage, isLoading: false });
     }
   },

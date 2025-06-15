@@ -41,12 +41,7 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 
   const command: UpdateAiSuggestionCommand = bodyValidation.data;
 
-  const { data, error } = await aiSuggestionService.updateSuggestion(
-    supabase,
-    suggestionId,
-    user.id,
-    command,
-  );
+  const { data, error } = await aiSuggestionService.updateSuggestion(supabase, suggestionId, user.id, command);
 
   if (error) {
     const status = error.includes("Failed to update") ? 404 : 500;
@@ -56,18 +51,25 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
     });
   }
 
+  if (!data) {
+    return new Response(JSON.stringify({ message: "Failed to update suggestion: data is null" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const responseDto: AiSuggestionDto = {
-    id: data!.id,
-    user_id: data!.user_id,
-    batch_id: data!.batch_id,
-    front_suggestion: data!.front_suggestion,
-    back_suggestion: data!.back_suggestion,
-    status: data!.status,
-    created_at: data!.created_at,
+    id: data.id,
+    user_id: data.user_id,
+    batch_id: data.batch_id,
+    front_suggestion: data.front_suggestion,
+    back_suggestion: data.back_suggestion,
+    status: data.status,
+    created_at: data.created_at,
   };
 
   return new Response(JSON.stringify(responseDto), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
-}; 
+};

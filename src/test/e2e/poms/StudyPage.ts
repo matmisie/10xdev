@@ -29,4 +29,4 @@ export class StudyPage {
   async isSummaryVisible() {
     return this.sessionSummaryCard.isVisible();
   }
-} 
+}

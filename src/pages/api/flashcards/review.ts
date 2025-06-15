@@ -18,11 +18,10 @@ export const GET: APIRoute = async ({ locals }) => {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
+  } catch {
     // Basic error handling, assuming service layer might throw errors
-    console.error(error);
     return new Response(JSON.stringify({ message: "Failed to fetch review deck" }), {
       status: 500,
     });
   }
-}; 
+};

@@ -51,9 +51,7 @@ describe("AiSuggestionService", () => {
       choices: [
         {
           message: {
-            content: JSON.stringify([
-              { front: "Największy księżyc Układu Słonecznego?", back: "Ganimedes" },
-            ]),
+            content: JSON.stringify([{ front: "Największy księżyc Układu Słonecznego?", back: "Ganimedes" }]),
           },
         },
       ],
@@ -67,7 +65,6 @@ describe("AiSuggestionService", () => {
       data: [{ id: "suggestion-1" }],
       error: null,
     };
-    // @ts-ignore
     mockSelect.mockResolvedValue(mockDbInsertResponse);
 
     // Act
@@ -125,7 +122,6 @@ describe("AiSuggestionService", () => {
     });
 
     const dbError = { message: "DB constraint violation" };
-    // @ts-ignore
     mockSelect.mockResolvedValue({ data: null, error: dbError });
 
     // Act
@@ -168,4 +164,4 @@ describe("AiSuggestionService", () => {
     expect(result.data).toBeNull();
     expect(result.error).toBe("An unexpected error occurred.");
   });
-}); 
+});

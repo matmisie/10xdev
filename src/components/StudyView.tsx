@@ -11,15 +11,8 @@ const LoadingSpinner = () => (
 );
 
 const StudyView = () => {
-  const {
-    status,
-    currentCard,
-    isAnswerVisible,
-    reviewedCount,
-    correctAnswersCount,
-    showAnswer,
-    gradeAnswer,
-  } = useStudySession();
+  const { status, currentCard, isAnswerVisible, reviewedCount, correctAnswersCount, showAnswer, gradeAnswer } =
+    useStudySession();
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -47,4 +40,4 @@ const StudyView = () => {
   return null; // Should not be reached in normal flow
 };
 
-export default StudyView; 
+export default StudyView;

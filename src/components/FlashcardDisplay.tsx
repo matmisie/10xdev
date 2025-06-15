@@ -10,12 +10,7 @@ interface FlashcardDisplayProps {
   onGradeAnswer: (outcome: ReviewOutcome) => void;
 }
 
-const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({
-  card,
-  isAnswerVisible,
-  onShowAnswer,
-  onGradeAnswer,
-}) => {
+const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({ card, isAnswerVisible, onShowAnswer, onGradeAnswer }) => {
   return (
     <div className="flex h-full items-center justify-center">
       <Card className="w-full max-w-2xl">
@@ -36,26 +31,19 @@ const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({
           </>
         )}
         <CardFooter className="flex justify-end gap-4">
-          <Button 
-            onClick={onShowAnswer} 
+          <Button
+            onClick={onShowAnswer}
             data-test-id="show-answer-button"
-            className={isAnswerVisible ? 'hidden' : 'inline-flex'}
+            className={isAnswerVisible ? "hidden" : "inline-flex"}
           >
             Pokaż odpowiedź
           </Button>
 
-          <div className={isAnswerVisible ? 'flex justify-end gap-4' : 'hidden'}>
-            <Button 
-              variant="outline" 
-              onClick={() => onGradeAnswer("incorrect")} 
-              data-test-id="grade-incorrect-button"
-            >
+          <div className={isAnswerVisible ? "flex justify-end gap-4" : "hidden"}>
+            <Button variant="outline" onClick={() => onGradeAnswer("incorrect")} data-test-id="grade-incorrect-button">
               Nie wiedziałem
             </Button>
-            <Button 
-              onClick={() => onGradeAnswer("correct")} 
-              data-test-id="grade-correct-button"
-            >
+            <Button onClick={() => onGradeAnswer("correct")} data-test-id="grade-correct-button">
               Wiedziałem
             </Button>
           </div>
@@ -65,4 +53,4 @@ const FlashcardDisplay: React.FC<FlashcardDisplayProps> = ({
   );
 };
 
-export default FlashcardDisplay; 
+export default FlashcardDisplay;

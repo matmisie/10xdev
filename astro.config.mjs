@@ -5,7 +5,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import node from "@astrojs/node";
-import istanbul from 'vite-plugin-istanbul';
+import istanbul from "vite-plugin-istanbul";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,21 +15,21 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
-      process.env.MODE === 'test'
+      process.env.MODE === "test"
         ? istanbul({
-            include: 'src/*',
-            exclude: ['node_modules', 'src/test/'],
-            extension: ['.js', '.ts', '.tsx', '.astro'],
+            include: "src/*",
+            exclude: ["node_modules", "src/test/"],
+            extension: [".js", ".ts", ".tsx", ".astro"],
             requireEnv: true,
-            nycrcPath: './.nycrc.json',
+            nycrcPath: "./.nycrc.json",
           })
         : null,
     ],
     server: {
       watch: {
-        ignored: ['**/.idea/**', '**/tests/**', '**/.git/**']
-      }
-    }
+        ignored: ["**/.idea/**", "**/tests/**", "**/.git/**"],
+      },
+    },
   },
   adapter: node({
     mode: "standalone",

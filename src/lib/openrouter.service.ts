@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { flashcardSetSchema, type Flashcard, type FlashcardSet } from "src/types";
 import { ApiError, ValidationError } from "src/lib/errors";
@@ -48,7 +47,6 @@ export class OpenRouterService {
       ],
       response_format: {
         type: "json_schema",
-        // @ts-ignore
         json_schema: finalSchemaPayload,
       },
       max_tokens: 4096,
@@ -56,7 +54,7 @@ export class OpenRouterService {
     };
   }
 
-  private async sendRequest(payload: object): Promise<any> {
+  private async sendRequest(payload: object): Promise<unknown> {
     const response = await fetch(`${OPENROUTER_API_BASE}/chat/completions`, {
       method: "POST",
       headers: {
@@ -67,27 +65,45 @@ export class OpenRouterService {
     });
 
     if (!response.ok) {
-      const errorBody = await response.text();
-      console.error("API Error Body:", errorBody);
+      await response.text();
       throw new ApiError(`API request failed with status ${response.status}`, response.status);
     }
 
     return response.json();
   }
 
-  private parseAndValidateResponse(response: any): FlashcardSet {
-    const content = response.choices?.[0]?.message?.content;
+  private parseAndValidateResponse(response: unknown): FlashcardSet {
+    if (
+      typeof response !== "object" ||
+      response === null ||
+      !("choices" in response) ||
+      !Array.isArray(response.choices) ||
+      response.choices.length === 0
+    ) {
+      throw new ValidationError("Invalid API response: No choices found.");
+    }
 
-    if (!content) {
+    const firstChoice = response.choices[0];
+    if (
+      typeof firstChoice !== "object" ||
+      firstChoice === null ||
+      !("message" in firstChoice) ||
+      typeof firstChoice.message !== "object" ||
+      firstChoice.message === null ||
+      !("content" in firstChoice.message) ||
+      typeof firstChoice.message.content !== "string"
+    ) {
       throw new ValidationError("Invalid API response: No content found.");
     }
+
+    const content = firstChoice.message.content;
 
     try {
       const data = JSON.parse(content);
       const validationResult = flashcardSetSchema.safeParse(data);
 
       if (!validationResult.success) {
-        throw new ValidationError("Validation failed", validationResult.error.flatten());
+        throw new ValidationError("Validation failed", validationResult.error.flatten().fieldErrors);
       }
 
       return validationResult.data;

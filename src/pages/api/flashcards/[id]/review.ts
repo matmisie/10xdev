@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   let body;
   try {
     body = await request.json();
-  } catch (error) {
+  } catch {
     return new Response(JSON.stringify({ message: "Invalid JSON body" }), { status: 400 });
   }
 
@@ -42,11 +42,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   // 3. Business logic
   const studyService = new StudyService(supabase);
   try {
-    const updatedFlashcard = await studyService.gradeFlashcard(
-      idValidation.data,
-      user.id,
-      bodyValidation.data.outcome,
-    );
+    const updatedFlashcard = await studyService.gradeFlashcard(idValidation.data, user.id, bodyValidation.data.outcome);
     return new Response(JSON.stringify(updatedFlashcard), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -58,9 +54,8 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
         return new Response(JSON.stringify({ message: error.message }), { status: 404 });
       }
     }
-    console.error("Error grading flashcard:", error);
     return new Response(JSON.stringify({ message: "Failed to grade flashcard" }), {
       status: 500,
     });
   }
-}; 
+};

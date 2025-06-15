@@ -35,4 +35,4 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ reviewedCount, correctA
   );
 };
 
-export default SessionSummary; 
+export default SessionSummary;

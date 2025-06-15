@@ -16,16 +16,23 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  
+
   if (user) {
+    if (!user.email) {
+      // This case should ideally not happen for a logged-in user,
+      // but it's good practice to handle it.
+      // Depending on the app's logic, you might want to redirect,
+      // show an error, or sign the user out.
+      throw new Error("User is authenticated but has no email address.");
+    }
     locals.user = {
-      email: user.email!,
+      email: user.email,
       id: user.id,
     };
   } else {
     locals.user = null;
   }
-  
+
   // For Astro type-safety
   locals.supabase = supabase;
 

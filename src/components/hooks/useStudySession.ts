@@ -30,8 +30,7 @@ const useStudySession = () => {
             isAnswerVisible: false,
           });
         }
-      } catch (error) {
-        console.error("Failed to fetch review cards:", error);
+      } catch {
         toast.error("Wystąpił błąd podczas pobierania fiszek. Spróbuj odświeżyć stronę.");
         // Optional: Set a specific error status to show a message in the UI
         // setSessionState(prev => ({ ...prev, status: 'error' }));
@@ -74,15 +73,14 @@ const useStudySession = () => {
       } else {
         setSessionState((prev) => ({ ...prev, status: "summary" }));
       }
-    } catch (error) {
-      console.error("Failed to grade review:", error);
+    } catch {
       toast.error("Wystąpił błąd podczas zapisywania oceny. Spróbuj ponownie.");
     }
   };
 
   const currentCard = useMemo(
     () => (sessionState.cards.length > 0 ? sessionState.cards[sessionState.currentCardIndex] : null),
-    [sessionState.cards, sessionState.currentCardIndex],
+    [sessionState.cards, sessionState.currentCardIndex]
   );
 
   const reviewedCount = useMemo(() => {
@@ -91,7 +89,6 @@ const useStudySession = () => {
     }
     return sessionState.currentCardIndex;
   }, [sessionState.status, sessionState.currentCardIndex, sessionState.cards.length]);
-
 
   return {
     ...sessionState,
@@ -103,4 +100,4 @@ const useStudySession = () => {
   };
 };
 
-export default useStudySession; 
+export default useStudySession;

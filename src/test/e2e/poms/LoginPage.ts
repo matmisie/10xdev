@@ -22,4 +22,4 @@ export class LoginPage {
     await this.passwordInput.pressSequentially(password_val, { delay: 50 });
     await this.submitButton.click();
   }
-} 
+}

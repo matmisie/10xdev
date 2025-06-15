@@ -4,8 +4,28 @@ import useStudySession from "./useStudySession";
 import type { FlashcardDto } from "@/types";
 
 const mockFlashcards: FlashcardDto[] = [
-    { id: "1", front: "Q1", back: "A1", leitner_box: 1, user_id: "user-1", next_review_at: "", created_at: "", updated_at: "", source: "manual"},
-    { id: "2", front: "Q2", back: "A2", leitner_box: 2, user_id: "user-1", next_review_at: "", created_at: "", updated_at: "", source: "manual"},
+  {
+    id: "1",
+    front: "Q1",
+    back: "A1",
+    leitner_box: 1,
+    user_id: "user-1",
+    next_review_at: "",
+    created_at: "",
+    updated_at: "",
+    source: "manual",
+  },
+  {
+    id: "2",
+    front: "Q2",
+    back: "A2",
+    leitner_box: 2,
+    user_id: "user-1",
+    next_review_at: "",
+    created_at: "",
+    updated_at: "",
+    source: "manual",
+  },
 ];
 
 const mockEmptyFlashcards: FlashcardDto[] = [];
@@ -59,15 +79,15 @@ describe("useStudySession", () => {
   });
 
   it("should handle fetch error gracefully", async () => {
-     mockFetch.mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
     });
-    
+
     const { result } = renderHook(() => useStudySession());
 
     await waitFor(() => {
-        expect(result.current.status).toBe("loading");
+      expect(result.current.status).toBe("loading");
     });
     expect(result.current.status).not.toBe("studying");
     expect(result.current.status).not.toBe("empty");
@@ -75,8 +95,8 @@ describe("useStudySession", () => {
 
   it("should show the answer when showAnswer is called", async () => {
     mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockFlashcards,
+      ok: true,
+      json: async () => mockFlashcards,
     });
 
     const { result } = renderHook(() => useStudySession());
@@ -84,9 +104,9 @@ describe("useStudySession", () => {
     await waitFor(() => {
       expect(result.current.status).toBe("studying");
     });
-    
+
     expect(result.current.isAnswerVisible).toBe(false);
-    
+
     act(() => {
       result.current.showAnswer();
     });
@@ -95,12 +115,12 @@ describe("useStudySession", () => {
   });
 
   describe("gradeAnswer", () => {
-     beforeEach(() => {
-        mockFetch.mockResolvedValue({
-            ok: true,
-            json: async () => ({ success: true }),
-        });
-     });
+    beforeEach(() => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+    });
 
     it("should increment correct answers and move to the next card on 'correct'", async () => {
       mockFetch.mockResolvedValueOnce({
@@ -111,7 +131,7 @@ describe("useStudySession", () => {
       const { result } = renderHook(() => useStudySession());
 
       await waitFor(() => expect(result.current.status).toBe("studying"));
-      
+
       await act(async () => {
         await result.current.gradeAnswer("correct");
       });
@@ -122,7 +142,7 @@ describe("useStudySession", () => {
     });
 
     it("should not increment correct answers but move to the next card on 'incorrect'", async () => {
-       mockFetch.mockResolvedValueOnce({
+      mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockFlashcards,
       });
@@ -130,7 +150,7 @@ describe("useStudySession", () => {
       const { result } = renderHook(() => useStudySession());
 
       await waitFor(() => expect(result.current.status).toBe("studying"));
-      
+
       await act(async () => {
         await result.current.gradeAnswer("incorrect");
       });
@@ -140,22 +160,22 @@ describe("useStudySession", () => {
     });
 
     it("should transition to summary status after grading the last card", async () => {
-        mockFetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => [mockFlashcards[0]], // Session with only one card
-        });
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => [mockFlashcards[0]], // Session with only one card
+      });
 
-        const { result } = renderHook(() => useStudySession());
+      const { result } = renderHook(() => useStudySession());
 
-        await waitFor(() => expect(result.current.status).toBe("studying"));
-        
-        await act(async () => {
-            await result.current.gradeAnswer("correct");
-        });
-        
-        expect(result.current.status).toBe("summary");
-        expect(result.current.reviewedCount).toBe(1);
-        expect(result.current.correctAnswersCount).toBe(1);
+      await waitFor(() => expect(result.current.status).toBe("studying"));
+
+      await act(async () => {
+        await result.current.gradeAnswer("correct");
+      });
+
+      expect(result.current.status).toBe("summary");
+      expect(result.current.reviewedCount).toBe(1);
+      expect(result.current.correctAnswersCount).toBe(1);
     });
   });
-}); 
+});

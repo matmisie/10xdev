@@ -33,9 +33,7 @@ if (!user) {
         <Card>
           <CardHeader>
             <CardTitle>Generator fiszek</CardTitle>
-            <CardDescription>
-              Stwórz nowe fiszki z pomocą AI lub dodaj je ręcznie.
-            </CardDescription>
+            <CardDescription> Stwórz nowe fiszki z pomocą AI lub dodaj je ręcznie. </CardDescription>
           </CardHeader>
           <CardContent>
             <AiFlashcardGenerator client:load />
@@ -44,12 +42,14 @@ if (!user) {
         <Card>
           <CardHeader>
             <CardTitle>Sesja Nauki</CardTitle>
-            <CardDescription>
-              Rozpocznij sesję powtórek fiszek zaplanowanych na dziś.
-            </CardDescription>
+            <CardDescription> Rozpocznij sesję powtórek fiszek zaplanowanych na dziś. </CardDescription>
           </CardHeader>
           <CardContent>
-            <a href="/app/study" class={buttonVariants({ variant: "default", size: "lg" })} data-test-id="start-study-session-button">
+            <a
+              href="/app/study"
+              class={buttonVariants({ variant: "default", size: "lg" })}
+              data-test-id="start-study-session-button"
+            >
               Rozpocznij naukę
               <ArrowRight className="ml-2 h-5 w-5" />
             </a>
@@ -59,4 +59,3 @@ if (!user) {
     </div>
   </div>
 </AppLayout>
-
