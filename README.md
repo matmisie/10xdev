@@ -1,5 +1,7 @@
 # Inteligentne Fiszki (Smart Flashcards)
 
+PR test
+
 [![Project Status: In Development](https://img.shields.io/badge/status-in_development-blueviolet.svg)](https://shields.io)
 
 A web application designed to help students, especially those in AI and ML fields, efficiently create study materials. It addresses the time-consuming process of manual flashcard creation by leveraging AI to automatically generate question-and-answer pairs from user-provided text notes.
