@@ -25,6 +25,13 @@ export default defineConfig({
           })
         : null,
     ],
+    resolve: {
+      alias: import.meta.env.PROD
+        ? {
+            "react-dom/server": "react-dom/server.edge",
+          }
+        : {},
+    },
     server: {
       watch: {
         ignored: ["**/.idea/**", "**/tests/**", "**/.git/**"],
