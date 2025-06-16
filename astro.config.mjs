@@ -4,7 +4,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import cloudflare from "@astrojs/cloudflare";
+import node from "@astrojs/node";
 import istanbul from "vite-plugin-istanbul";
 
 // https://astro.build/config
@@ -25,19 +25,14 @@ export default defineConfig({
           })
         : null,
     ],
-    resolve: {
-      alias: import.meta.env.PROD
-        ? {
-            "react-dom/server": "react-dom/server.edge",
-          }
-        : {},
-    },
     server: {
       watch: {
         ignored: ["**/.idea/**", "**/tests/**", "**/.git/**"],
       },
     },
   },
-  adapter: cloudflare(),
+  adapter: node({
+    mode: "standalone",
+  }),
   experimental: { session: true },
 });

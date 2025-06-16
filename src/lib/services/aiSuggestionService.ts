@@ -119,7 +119,7 @@ export class AiSuggestionService {
       const batchId = uuidv4();
       const sourceTextHash = SHA256(text).toString();
 
-      const prompt = `Based on the text below, generate a list of flashcards. Each flashcard should have a 'front' (question) and a 'back' (answer). Provide the output as a JSON array of objects, where each object has 'front' and 'back' keys. Do not include any other text in your response, only the JSON array.
+      const prompt = `Na podstawie poniższego tekstu wygeneruj listę fiszek w języku polskim. Każda fiszka powinna mieć „front” (pytanie) i „back” (odpowiedź). Podaj wynik jako tablicę obiektów JSON, gdzie każdy obiekt ma klucze „front” i „back”. Nie dołączaj żadnego innego tekstu do swojej odpowiedzi, tylko tablicę JSON.
 
 Text:
 """
