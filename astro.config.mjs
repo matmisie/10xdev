@@ -18,7 +18,11 @@ export default defineConfig({
         ignored: ["**/.idea/**", "**/tests/**", "**/.git/**"],
       },
     },
+    resolve: {
+      alias: {
+        "react-dom/server": "react-dom/server.edge",
+      },
+    },
   },
   adapter: cloudflare(),
-  experimental: { session: true },
 });
