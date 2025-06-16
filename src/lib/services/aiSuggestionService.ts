@@ -1,12 +1,17 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Enums } from "@/db/database.types";
-import { v4 as uuidv4 } from "uuid";
-import SHA256 from "crypto-js/sha256";
 import type { UpdateAiSuggestionCommand } from "@/types";
 
 interface FlashcardSuggestion {
   front: string;
   back: string;
+}
+
+async function sha256(str: string): Promise<string> {
+  const textAsBuffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", textAsBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export class AiSuggestionService {
@@ -116,8 +121,8 @@ export class AiSuggestionService {
 
   public async generateAndStoreSuggestions(text: string, userId: string, db: SupabaseClient<Database>) {
     try {
-      const batchId = uuidv4();
-      const sourceTextHash = SHA256(text).toString();
+      const batchId = crypto.randomUUID();
+      const sourceTextHash = await sha256(text);
 
       const prompt = `Na podstawie poniższego tekstu wygeneruj listę fiszek w języku polskim. Każda fiszka powinna mieć „front” (pytanie) i „back” (odpowiedź). Podaj wynik jako tablicę obiektów JSON, gdzie każdy obiekt ma klucze „front” i „back”. Nie dołączaj żadnego innego tekstu do swojej odpowiedzi, tylko tablicę JSON.
 
@@ -147,7 +152,7 @@ ${text}
       const suggestions: FlashcardSuggestion[] = JSON.parse(suggestionsJson);
 
       const suggestionsToInsert = suggestions.map((s) => ({
-        id: uuidv4(),
+        id: crypto.randomUUID(),
         user_id: userId,
         batch_id: batchId,
         source_text_hash: sourceTextHash,

@@ -3,23 +3,20 @@ import { AiSuggestionService } from "./aiSuggestionService";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/db/database.types";
 
-// --- Mocks ---
-
-// Mockowanie uuid
-vi.mock("uuid", () => ({
-  v4: vi.fn(() => "mock-uuid"),
-}));
-
-// Mockowanie crypto-js
-vi.mock("crypto-js/sha256", () => ({
-  default: vi.fn(() => ({
-    toString: () => "mock-hash",
-  })),
+vi.mock("@/db/supabase.client", () => ({
+  createSupabaseServerInstance: vi.fn(),
 }));
 
 // Globalny mock dla fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
+
+vi.stubGlobal("crypto", {
+  randomUUID: vi.fn(() => "mock-uuid"),
+  subtle: {
+    digest: vi.fn().mockResolvedValue(new ArrayBuffer(8)), // Prosta atrapa
+  },
+});
 
 const mockSelect = vi.fn();
 const mockInsert = vi.fn(() => ({
@@ -81,7 +78,7 @@ describe("AiSuggestionService", () => {
         id: "mock-uuid",
         user_id: userId,
         batch_id: "mock-uuid",
-        source_text_hash: "mock-hash",
+        source_text_hash: "0000000000000000",
         front_suggestion: "Największy księżyc Układu Słonecznego?",
         back_suggestion: "Ganimedes",
         status: "pending",
