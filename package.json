@@ -78,7 +78,6 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript-eslint": "8.28.0",
-    "vite-plugin-istanbul": "^7.0.0",
     "vitest": "^3.2.3"
   },
   "lint-staged": {
