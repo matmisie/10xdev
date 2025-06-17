@@ -1,4 +1,4 @@
-name: Build and Deploy Docker to DigitalOcean
+name: Deploy container to DigitalOcean
 
 on:
   workflow_dispatch:
@@ -11,14 +11,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-and-dependencies
 
       - name: Run linting
         run: npm run lint:check
@@ -31,14 +25,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup environment
+        uses: ./.github/actions/setup-node-and-dependencies
 
       - name: Run unit tests with coverage
         run: npm run test
@@ -69,7 +57,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+          images: ghcr.io/matmisie/10xdev
           tags: |
             type=sha,prefix=
             type=raw,value=latest
@@ -81,8 +69,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            PUBLIC_ENV_NAME=${{ secrets.PUBLIC_ENV_NAME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

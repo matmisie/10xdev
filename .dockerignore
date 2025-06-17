@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Dependencies
+node_modules
+dist
+
+# IDE
+.idea
+.vscode
+.fleet
+
+# Environment
+.env
+.env.*
+*.local
+
+# Testing
+coverage
+playwright-report
+test-results
+src/test/
+
+# OS
+.DS_Store 
