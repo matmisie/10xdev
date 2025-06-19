@@ -28,4 +28,4 @@
 ## CI/CD i Hosting:
 
 - Github Actions do tworzenia pipeline'ów CI/CD
-- CloudFlare Pages jako hosting aplikacji Astro
+- Digital Ocean App Platform (kontener Docker) oraz CloudFlare Pages jako hosting aplikacji Astro

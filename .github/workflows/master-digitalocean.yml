@@ -86,3 +86,4 @@ jobs:
       - name: Deploy to DigitalOcean App Platform
         run: |
           doctl apps create-deployment ${{ vars.DIGITALOCEAN_APP_ID }}
+          doctl apps get ${{ vars.DIGITALOCEAN_APP_ID }} --format DefaultIngress
