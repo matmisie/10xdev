@@ -54,6 +54,7 @@ jobs:
       - name: Deploy to Cloudflare Pages
         run: |
           npx wrangler pages deploy dist --project-name=10xdev
+          ls -la
           CHUNK_FILE=$(find ./chunks -name "supabase.client_*.mjs")
           echo "Found Supabase client chunk at: $CHUNK_FILE"
           cat "$CHUNK_FILE"
