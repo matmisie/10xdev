@@ -20,9 +20,9 @@ export default defineConfig({
       },
     },
     resolve: {
-      alias: import.meta.env.DEPLOY_TO_CF === "true" &&
+      alias: process.env.DEPLOY_TO_CF === "true" &&
         import.meta.env.PROD && { "react-dom/server": "react-dom/server.edge" },
     },
   },
-  adapter: import.meta.env.DEPLOY_TO_CF === "true" ? cloudflare() : node({ mode: "standalone" }),
+  adapter: process.env.DEPLOY_TO_CF === "true" ? cloudflare() : node({ mode: "standalone" }),
 });
