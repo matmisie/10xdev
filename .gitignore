@@ -31,3 +31,4 @@ playwright/.cache/
 test-results/
 coverage/
 .wrangler/
+.dev.vars

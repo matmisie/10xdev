@@ -4,5 +4,5 @@ compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2025-06-12"
 
 [vars]
-SUPABASE_URL=https://ickhdbaubbgynckmzdyg.supabase.co
-DEPLOY_TO_CF=true
+SUPABASE_URL="https://ickhdbaubbgynckmzdyg.supabase.co"
+DEPLOY_TO_CF="true"
