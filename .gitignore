@@ -30,3 +30,4 @@ playwright-report/
 playwright/.cache/
 test-results/
 coverage/
+.wrangler/

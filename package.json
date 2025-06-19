@@ -7,7 +7,6 @@
     "dev:e2e": "astro dev --mode test",
     "build": "astro build",
     "start": "node ./dist/server/entry.mjs",
-    "preview": "wrangler pages dev ./dist --port 8080",
     "astro": "astro",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest --watch",
@@ -16,8 +15,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "deploy:cf": "npm run build && wrangler pages deploy ./dist --project-name=10xdev",
-    "deploy:cf:debug": "npm run deploy:cf && wrangler pages deployment tail --project-name=10xdev"
+    "cf:build": "DEPLOY_TO_CF=true npm run build",
+    "cf:dev": "npm run cf:build && wrangler pages dev ./dist --port 8080",
+    "cf:deploy": "npm run cf:build && wrangler pages deploy ./dist --project-name=10xdev",
+    "cf:deploy:debug": "npm run cf:deploy && wrangler pages deployment tail --project-name=10xdev"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.4",
