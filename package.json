@@ -7,7 +7,7 @@
     "dev:e2e": "astro dev --mode test",
     "build": "astro build",
     "start": "node ./dist/server/entry.mjs",
-    "preview": "wrangler pages dev ./dist --port 3000",
+    "preview": "wrangler pages dev ./dist --port 8080",
     "astro": "astro",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest --watch",
