@@ -85,4 +85,4 @@ jobs:
 
       - name: Deploy to DigitalOcean App Platform
         run: |
-          doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }}
+          doctl apps create-deployment ${{ vars.DIGITALOCEAN_APP_ID }}
